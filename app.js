@@ -5,6 +5,10 @@ const express = require('express');
 // start express
 const app = express();
 
+// Now! we can use the req.body
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+
 // connect database
 const mongoose = require('mongoose');
 const db = mongoose.connection;
@@ -14,9 +18,11 @@ db.once('open', () => {
 });
 
 //set the router
-app.use('/api/book', (req, res) => {
-  res.send({message: "我是book router"});
-});
+const bookRouter = require('./routers/api/bookRouter');
+app.use('/api/book', bookRouter);
+const authorRouter = require('./routers/api/authorRouter');
+app.use('/api/author', authorRouter);
+
 
 // start the app
 app.listen(5000, () => {
